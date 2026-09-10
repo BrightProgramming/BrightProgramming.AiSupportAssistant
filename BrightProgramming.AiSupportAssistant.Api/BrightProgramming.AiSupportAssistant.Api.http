@@ -1,6 +1,10 @@
 @BrightProgramming.AiSupportAssistant.Api_HostAddress = http://localhost:5216
 
-GET {{BrightProgramming.AiSupportAssistant.Api_HostAddress}}/weatherforecast/
-Accept: application/json
+POST {{BrightProgramming.AiSupportAssistant.Api_HostAddress}}/Support
+Content-Type: application/json
+
+{
+  "question": "Why is my payment terminal showing a connection timeout?"
+}
 
 ###

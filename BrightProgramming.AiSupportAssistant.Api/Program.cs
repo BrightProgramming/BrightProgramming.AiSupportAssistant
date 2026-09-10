@@ -1,9 +1,12 @@
+using BrightProgramming.AiSupportAssistant.Api.Services;
+using BrightProgramming.AiSupportAssistant.Api.Configuration;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+builder.Services.AddApplicationServices();
 builder.Services.AddOpenApi();
 
 var app = builder.Build();

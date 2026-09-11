@@ -1,15 +1,15 @@
-﻿using BrightProgramming.AiSupportAssistant.Api.Ai.Providers.OpenAi;
-using BrightProgramming.AiSupportAssistant.Api.Ai.Factory;
+﻿using BrightProgramming.AiSupportAssistant.Api.Ai.Factory;
+using BrightProgramming.AiSupportAssistant.Api.Ai.Providers;
+using BrightProgramming.AiSupportAssistant.Api.Ai.Providers.OpenAi;
 using BrightProgramming.AiSupportAssistant.Api.Configuration;
 using Microsoft.Extensions.Options;
 using OpenAI.Chat;
-using BrightProgramming.AiSupportAssistant.Api.Ai.Providers;
 
 namespace BrightProgramming.AiSupportAssistant.Api.StartupConfiguration;
 
-public static class AiProviderConfiguration
+public static class AiConfiguration
 {
-    public static IServiceCollection AddAiProviders(
+    public static IServiceCollection AddAi(
         this IServiceCollection services)
     {
         services.AddSingleton<ChatClient>(serviceProvider =>

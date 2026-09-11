@@ -23,8 +23,7 @@ public class MarkdownKnowledgeProvider : IKnowledgeProvider
         LoadDocuments();
     }
 
-    public Task<KnowledgeContext> GetRelevantKnowledgeAsync(
-        string question,
+    public Task<KnowledgeContext> GetKnowledgeAsync(
         CancellationToken cancellationToken)
     {
         var context = new KnowledgeContext

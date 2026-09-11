@@ -8,8 +8,8 @@ builder.Services.AddControllers();
 
 builder.Services.AddOptions(builder.Configuration);
 builder.Services.AddMappers();
-builder.Services.AddAiProviders();
-builder.Services.AddKnowledgeProviders();
+builder.Services.AddAi();
+builder.Services.AddKnowledge();
 builder.Services.AddApplicationServices();
 builder.Services.AddExceptionHandling();
 

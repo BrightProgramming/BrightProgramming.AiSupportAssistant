@@ -6,7 +6,5 @@ public interface IKnowledgeProvider
 {
     string Name { get; }
 
-    Task<KnowledgeContext> GetRelevantKnowledgeAsync(
-        string question,
-        CancellationToken cancellationToken);
+    Task<KnowledgeContext> GetKnowledgeAsync(CancellationToken cancellationToken);
 }

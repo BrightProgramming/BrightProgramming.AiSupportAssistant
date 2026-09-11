@@ -24,6 +24,15 @@ public class OpenAiProvider : IAiProvider
     {
         var completion = await _chatClient.CompleteChatAsync(question);
 
-        return completion.Value.Content[0].Text;
+        var text = completion.Value.Content
+            .FirstOrDefault()?.Text;
+
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            throw new InvalidOperationException(
+                "AI provider returned an empty response.");
+        }
+
+        return text;
     }
 }

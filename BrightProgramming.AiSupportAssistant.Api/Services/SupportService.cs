@@ -1,20 +1,21 @@
 ﻿using BrightProgramming.AiSupportAssistant.Api.Ai;
+using BrightProgramming.AiSupportAssistant.Api.Ai.Factory;
 using BrightProgramming.AiSupportAssistant.Api.Models;
 
 namespace BrightProgramming.AiSupportAssistant.Api.Services;
 
 public class SupportService : ISupportService
 {
-    private readonly IAiService _aiService;
+    private readonly IAiProvider _aiProvider;
 
-    public SupportService(IAiService aiService)
+    public SupportService(IAiProviderFactory aiProviderFactory)
     {
-        _aiService = aiService;
+        _aiProvider = aiProviderFactory.GetProvider();
     }
 
     public async Task<SupportResponse> GetAnswerAsync(SupportRequest request)
     {
-        var answer = await _aiService.GetAnswerAsync(request.Question);
+        var answer = await _aiProvider.GetAnswerAsync(request.Question);
 
         return new SupportResponse
         {

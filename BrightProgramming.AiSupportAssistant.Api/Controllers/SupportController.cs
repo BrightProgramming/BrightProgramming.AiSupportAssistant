@@ -1,4 +1,5 @@
 using BrightProgramming.AiSupportAssistant.Api.Ai;
+using BrightProgramming.AiSupportAssistant.Api.Mappers;
 using BrightProgramming.AiSupportAssistant.Api.Models.Api;
 using BrightProgramming.AiSupportAssistant.Api.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -9,23 +10,23 @@ namespace BrightProgramming.AiSupportAssistant.Api.Controllers;
 [Route("[controller]")]
 public class SupportController : ControllerBase
 {
-    private readonly IAiService _aiService;
+    private readonly ISupportService _supportService;
+    private readonly ISupportApiMapper _mapper;
 
-    public SupportController(IAiService aiService)
+    public SupportController(ISupportService supportService, ISupportApiMapper mapper)
     {
-        _aiService = aiService;
+        _supportService = supportService;
+        _mapper = mapper;
     }
 
-    [HttpPost()]
+    [HttpPost]
     public async Task<ActionResult<AskResponse>> AskAsync(
         AskRequest request)
     {
-        var answer = await _aiService.GetAnswerAsync(request.Question);
+        var supportRequest = _mapper.ToSupportRequest(request);
+        var supportResponse = await _supportService.GetAnswerAsync(supportRequest);
+        var mappedAnswer = _mapper.ToAskResponse(supportResponse);
 
-        return Ok(new AskResponse
-        {
-            Question = request.Question,
-            Answer = answer
-        });
+        return Ok(mappedAnswer);
     }
 }

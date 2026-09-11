@@ -1,5 +1,6 @@
-﻿using BrightProgramming.AiSupportAssistant.Api.Ai.Factory;
-using BrightProgramming.AiSupportAssistant.Api.Ai.Providers;
+﻿using BrightProgramming.AiSupportAssistant.Api.Ai.Answer.Factory;
+using BrightProgramming.AiSupportAssistant.Api.Ai.Answer.Providers;
+using BrightProgramming.AiSupportAssistant.Api.Knowledge;
 using BrightProgramming.AiSupportAssistant.Api.Knowledge.Factory;
 using BrightProgramming.AiSupportAssistant.Api.Knowledge.Providers;
 using BrightProgramming.AiSupportAssistant.Api.Models;
@@ -8,19 +9,35 @@ namespace BrightProgramming.AiSupportAssistant.Api.Services;
 
 public class SupportService : ISupportService
 {
-    private readonly IAiProvider _aiProvider;
+    private readonly IAiAnswerProvider _aiAnswerProvider;
     private readonly IKnowledgeProvider _knowledgeProvider;
+    private readonly IKnowledgeMatcher _knowledgeMatcher;
 
-    public SupportService(IAiProviderFactory aiProviderFactory,
-        IKnowledgeProviderFactory knowledgeProviderFactory)
+    public SupportService(
+        IAiAnswerProviderFactory aiProviderFactory,
+        IKnowledgeProviderFactory knowledgeProviderFactory,
+        IKnowledgeMatcher knowledgeMatcher)
     {
-        _aiProvider = aiProviderFactory.GetProvider();
+        _aiAnswerProvider = aiProviderFactory.GetProvider();
         _knowledgeProvider = knowledgeProviderFactory.GetProvider();
+        _knowledgeMatcher = knowledgeMatcher;
     }
 
-    public async Task<SupportResponse> GetAnswerAsync(SupportRequest request, CancellationToken cancellationToken)
+    public async Task<SupportResponse> GetAnswerAsync(
+        SupportRequest request,
+        CancellationToken cancellationToken)
     {
-        var answer = await _aiProvider.GetAnswerAsync(request.Question, cancellationToken);
+        var knowledge = await _knowledgeProvider.GetKnowledgeAsync(
+            cancellationToken);
+
+        var matchedKnowledge = await _knowledgeMatcher.MatchAsync(
+            request.Question,
+            knowledge,
+            cancellationToken);
+
+        var answer = await _aiAnswerProvider.GetAnswerAsync(
+            request.Question,
+            cancellationToken);
 
         return new SupportResponse
         {

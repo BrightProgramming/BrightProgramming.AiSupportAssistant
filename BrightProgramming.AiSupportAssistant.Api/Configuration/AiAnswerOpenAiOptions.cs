@@ -1,6 +1,6 @@
 ﻿namespace BrightProgramming.AiSupportAssistant.Api.Configuration;
 
-public class OpenAiOptions
+public class AiAnswerOpenAiOptions
 {
     public required string ApiKey { get; set; }
 

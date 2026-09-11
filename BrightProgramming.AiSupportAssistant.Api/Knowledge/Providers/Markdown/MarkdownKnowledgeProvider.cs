@@ -7,14 +7,14 @@ namespace BrightProgramming.AiSupportAssistant.Api.Knowledge.Providers.Markdown;
 
 public class MarkdownKnowledgeProvider : IKnowledgeProvider
 {
-    private readonly KnowledgeOptions _options;
+    private readonly KnowledgeSourceOptions _options;
     private readonly ILogger<MarkdownKnowledgeProvider> _logger;
     private readonly List<KnowledgeDocument> _documents = [];
 
     public string Name => KnowledgeProvider.Markdown;
 
     public MarkdownKnowledgeProvider(
-        IOptions<KnowledgeOptions> options,
+        IOptions<KnowledgeSourceOptions> options,
         ILogger<MarkdownKnowledgeProvider> logger)
     {
         _options = options.Value;

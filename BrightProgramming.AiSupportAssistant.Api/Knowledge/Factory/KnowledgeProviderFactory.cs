@@ -10,7 +10,7 @@ public class KnowledgeProviderFactory : IKnowledgeProviderFactory
 
     public KnowledgeProviderFactory(
         IEnumerable<IKnowledgeProvider> providers,
-        IOptions<KnowledgeOptions> options)
+        IOptions<KnowledgeSourceOptions> options)
     {
         var providerName = options.Value.Provider;
 

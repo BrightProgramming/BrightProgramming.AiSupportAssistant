@@ -1,6 +1,6 @@
 ﻿namespace BrightProgramming.AiSupportAssistant.Api.Configuration;
 
-public class KnowledgeOptions
+public class KnowledgeSourceOptions
 {
     public string Provider { get; set; } = string.Empty;
 

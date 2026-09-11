@@ -1,6 +1,6 @@
-﻿namespace BrightProgramming.AiSupportAssistant.Api.Ai.Providers;
+﻿namespace BrightProgramming.AiSupportAssistant.Api.Ai.Answer.Providers;
 
-public interface IAiProvider
+public interface IAiAnswerProvider
 {
     string Name { get; }
 

@@ -4,7 +4,8 @@ namespace BrightProgramming.AiSupportAssistant.Api.Knowledge;
 
 public interface IKnowledgeMatcher
 {
-    KnowledgeContext Match(
+    Task<KnowledgeContext> MatchAsync(
         string question,
-        KnowledgeContext knowledge);
+        KnowledgeContext knowledge,
+        CancellationToken cancellationToken);
 }

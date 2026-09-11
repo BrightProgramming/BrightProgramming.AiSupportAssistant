@@ -1,23 +1,24 @@
-﻿using BrightProgramming.AiSupportAssistant.Api.Ai.Exceptions;
+﻿using BrightProgramming.AiSupportAssistant.Api.Ai.Answer.Providers;
+using BrightProgramming.AiSupportAssistant.Api.Ai.Exceptions;
 using BrightProgramming.AiSupportAssistant.Api.Constants;
 using OpenAI.Chat;
 using System.ClientModel;
 using System.Diagnostics;
 
-namespace BrightProgramming.AiSupportAssistant.Api.Ai.Providers.OpenAi;
+namespace BrightProgramming.AiSupportAssistant.Api.Ai.Answer.Providers.OpenAi;
 
-public class OpenAiProvider : IAiProvider
+public class OpenAiAnswerProvider : IAiAnswerProvider
 {
     private const string SystemPrompt = "You are a helpful technical support assistant. Provide clear, concise and practical answers.";
 
     private readonly ChatClient _chatClient;
-    private readonly ILogger<OpenAiProvider> _logger;
+    private readonly ILogger<OpenAiAnswerProvider> _logger;
 
     public string Name => AiProvider.OpenAI;
 
-    public OpenAiProvider(
-        ChatClient chatClient,
-        ILogger<OpenAiProvider> logger)
+    public OpenAiAnswerProvider(
+        [FromKeyedServices("AiAnswer")] ChatClient chatClient,
+        ILogger<OpenAiAnswerProvider> logger)
     {
         _chatClient = chatClient;
         _logger = logger;

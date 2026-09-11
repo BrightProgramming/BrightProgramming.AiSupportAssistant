@@ -23,8 +23,11 @@ public class OpenAiProvider : IAiProvider
         _logger = logger;
     }
 
-    public async Task<string> GetAnswerAsync(string question)
+    public async Task<string> GetAnswerAsync(
+        string question,
+        CancellationToken cancellationToken)
     {
+        var stopwatch = Stopwatch.StartNew();
         _logger.LogInformation("Sending AI request using provider {Provider}. TraceId: {TraceId}", Name, Activity.Current?.Id);
 
         try
@@ -35,9 +38,13 @@ public class OpenAiProvider : IAiProvider
                 new UserChatMessage(question)
             };
 
-            var completion = await _chatClient.CompleteChatAsync(messages);
+            var completion = await _chatClient.CompleteChatAsync(messages, cancellationToken: cancellationToken);
 
-            _logger.LogInformation("AI request completed successfully using provider {Provider}. TraceId: {TraceId}", Name, Activity.Current?.Id);
+            _logger.LogInformation(
+                "AI request completed successfully using provider {Provider} in {ElapsedMilliseconds} ms. TraceId: {TraceId}",
+                Name,
+                stopwatch.ElapsedMilliseconds,
+                Activity.Current?.Id);
 
             var text = completion.Value.Content
                 .FirstOrDefault()?.Text;
@@ -50,9 +57,23 @@ public class OpenAiProvider : IAiProvider
 
             return text;
         }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            _logger.LogInformation(
+                "AI request was cancelled by the caller. Provider: {Provider}. TraceId: {TraceId}",
+                Name,
+                Activity.Current?.Id);
+
+            throw;
+        }
         catch (ClientResultException ex)
         {
-            _logger.LogError(ex, "AI provider request failed using provider {Provider}. TraceId: {TraceId}", Name, Activity.Current?.Id);
+            _logger.LogError(
+                ex,
+                "AI provider request failed using provider {Provider} after {ElapsedMilliseconds} ms. TraceId: {TraceId}",
+                Name,
+                stopwatch.ElapsedMilliseconds,
+                Activity.Current?.Id);
 
             throw new AiProviderException(
                 "The AI provider could not process the request.",

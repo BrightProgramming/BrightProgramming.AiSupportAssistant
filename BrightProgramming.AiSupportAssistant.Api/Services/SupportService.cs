@@ -13,9 +13,9 @@ public class SupportService : ISupportService
         _aiProvider = aiProviderFactory.GetProvider();
     }
 
-    public async Task<SupportResponse> GetAnswerAsync(SupportRequest request)
+    public async Task<SupportResponse> GetAnswerAsync(SupportRequest request, CancellationToken cancellationToken)
     {
-        var answer = await _aiProvider.GetAnswerAsync(request.Question);
+        var answer = await _aiProvider.GetAnswerAsync(request.Question, cancellationToken);
 
         return new SupportResponse
         {

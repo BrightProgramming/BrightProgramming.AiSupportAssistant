@@ -4,5 +4,5 @@ namespace BrightProgramming.AiSupportAssistant.Api.Services;
 
 public interface ISupportService
 {
-    Task<SupportResponse> GetAnswerAsync(SupportRequest request);
+    Task<SupportResponse> GetAnswerAsync(SupportRequest request, CancellationToken cancellationToken);
 }

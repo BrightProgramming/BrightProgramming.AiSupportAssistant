@@ -20,11 +20,10 @@ public class SupportController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<AskResponse>> AskAsync(
-        AskRequest request)
+    public async Task<ActionResult<AskResponse>> AskAsync(AskRequest request, CancellationToken cancellationToken)
     {
         var supportRequest = _mapper.ToSupportRequest(request);
-        var supportResponse = await _supportService.GetAnswerAsync(supportRequest);
+        var supportResponse = await _supportService.GetAnswerAsync(supportRequest, cancellationToken);
         var mappedAnswer = _mapper.ToAskResponse(supportResponse);
 
         return Ok(mappedAnswer);

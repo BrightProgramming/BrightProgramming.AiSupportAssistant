@@ -1,5 +1,7 @@
-﻿using BrightProgramming.AiSupportAssistant.Api.Ai;
-using BrightProgramming.AiSupportAssistant.Api.Ai.Factories;
+﻿using BrightProgramming.AiSupportAssistant.Api.Ai.Factory;
+using BrightProgramming.AiSupportAssistant.Api.Ai.Providers;
+using BrightProgramming.AiSupportAssistant.Api.Knowledge.Factory;
+using BrightProgramming.AiSupportAssistant.Api.Knowledge.Providers;
 using BrightProgramming.AiSupportAssistant.Api.Models;
 
 namespace BrightProgramming.AiSupportAssistant.Api.Services;
@@ -7,10 +9,13 @@ namespace BrightProgramming.AiSupportAssistant.Api.Services;
 public class SupportService : ISupportService
 {
     private readonly IAiProvider _aiProvider;
+    private readonly IKnowledgeProvider _knowledgeProvider;
 
-    public SupportService(IAiProviderFactory aiProviderFactory)
+    public SupportService(IAiProviderFactory aiProviderFactory,
+        IKnowledgeProviderFactory knowledgeProviderFactory)
     {
         _aiProvider = aiProviderFactory.GetProvider();
+        _knowledgeProvider = knowledgeProviderFactory.GetProvider();
     }
 
     public async Task<SupportResponse> GetAnswerAsync(SupportRequest request, CancellationToken cancellationToken)

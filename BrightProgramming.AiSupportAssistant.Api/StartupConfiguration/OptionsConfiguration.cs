@@ -2,7 +2,6 @@
 
 namespace BrightProgramming.AiSupportAssistant.Api.StartupConfiguration;
 
-
 public static class OptionsConfiguration
 {
     public static IServiceCollection AddOptions(
@@ -15,6 +14,13 @@ public static class OptionsConfiguration
             .Validate(
                 options => !string.IsNullOrWhiteSpace(options.Provider),
                 "AI provider must be configured.");
+
+        services
+            .AddOptions<KnowledgeOptions>()
+            .Bind(configuration.GetSection("Knowledge"))
+            .Validate(
+                options => !string.IsNullOrWhiteSpace(options.Provider),
+                "Knowledge provider must be configured.");
 
         services
             .AddOptions<OpenAiOptions>()

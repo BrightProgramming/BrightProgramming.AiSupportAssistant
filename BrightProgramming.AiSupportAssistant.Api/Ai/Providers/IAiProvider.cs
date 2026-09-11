@@ -1,4 +1,4 @@
-﻿namespace BrightProgramming.AiSupportAssistant.Api.Ai;
+﻿namespace BrightProgramming.AiSupportAssistant.Api.Ai.Providers;
 
 public interface IAiProvider
 {

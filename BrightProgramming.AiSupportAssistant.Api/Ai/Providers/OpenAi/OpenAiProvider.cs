@@ -4,7 +4,7 @@ using OpenAI.Chat;
 using System.ClientModel;
 using System.Diagnostics;
 
-namespace BrightProgramming.AiSupportAssistant.Api.Ai.OpenAi;
+namespace BrightProgramming.AiSupportAssistant.Api.Ai.Providers.OpenAi;
 
 public class OpenAiProvider : IAiProvider
 {

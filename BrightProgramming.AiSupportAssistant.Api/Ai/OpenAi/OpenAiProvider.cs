@@ -12,6 +12,8 @@ public class OpenAiProvider : IAiProvider
 
     public string Name => AiProvider.OpenAI;
 
+    private const string SystemPrompt = "You are a helpful technical support assistant. Provide clear, concise and practical answers.";
+
     public OpenAiProvider(
         ChatClient chatClient,
         IOptions<OpenAiOptions> options)
@@ -22,7 +24,13 @@ public class OpenAiProvider : IAiProvider
 
     public async Task<string> GetAnswerAsync(string question)
     {
-        var completion = await _chatClient.CompleteChatAsync(question);
+        var messages = new ChatMessage[]
+        {
+        new SystemChatMessage(SystemPrompt),
+        new UserChatMessage(question)
+        };
+
+        var completion = await _chatClient.CompleteChatAsync(messages);
 
         var text = completion.Value.Content
             .FirstOrDefault()?.Text;

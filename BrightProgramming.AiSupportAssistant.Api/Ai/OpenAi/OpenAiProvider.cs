@@ -1,31 +1,32 @@
 ﻿using BrightProgramming.AiSupportAssistant.Api.Ai.Exceptions;
-using BrightProgramming.AiSupportAssistant.Api.Configuration;
 using BrightProgramming.AiSupportAssistant.Api.Constants;
-using Microsoft.Extensions.Options;
 using OpenAI.Chat;
 using System.ClientModel;
+using System.Diagnostics;
 
 namespace BrightProgramming.AiSupportAssistant.Api.Ai.OpenAi;
 
 public class OpenAiProvider : IAiProvider
 {
+    private const string SystemPrompt = "You are a helpful technical support assistant. Provide clear, concise and practical answers.";
+
     private readonly ChatClient _chatClient;
-    private readonly OpenAiOptions _options;
+    private readonly ILogger<OpenAiProvider> _logger;
 
     public string Name => AiProvider.OpenAI;
 
-    private const string SystemPrompt = "You are a helpful technical support assistant. Provide clear, concise and practical answers.";
-
     public OpenAiProvider(
         ChatClient chatClient,
-        IOptions<OpenAiOptions> options)
+        ILogger<OpenAiProvider> logger)
     {
         _chatClient = chatClient;
-        _options = options.Value;
+        _logger = logger;
     }
 
     public async Task<string> GetAnswerAsync(string question)
     {
+        _logger.LogInformation("Sending AI request using provider {Provider}. TraceId: {TraceId}", Name, Activity.Current?.Id);
+
         try
         {
             var messages = new ChatMessage[]
@@ -35,6 +36,8 @@ public class OpenAiProvider : IAiProvider
             };
 
             var completion = await _chatClient.CompleteChatAsync(messages);
+
+            _logger.LogInformation("AI request completed successfully using provider {Provider}. TraceId: {TraceId}", Name, Activity.Current?.Id);
 
             var text = completion.Value.Content
                 .FirstOrDefault()?.Text;
@@ -49,6 +52,8 @@ public class OpenAiProvider : IAiProvider
         }
         catch (ClientResultException ex)
         {
+            _logger.LogError(ex, "AI provider request failed using provider {Provider}. TraceId: {TraceId}", Name, Activity.Current?.Id);
+
             throw new AiProviderException(
                 "The AI provider could not process the request.",
                 ex);

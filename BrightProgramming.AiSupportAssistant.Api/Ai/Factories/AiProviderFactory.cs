@@ -1,7 +1,6 @@
-﻿using BrightProgramming.AiSupportAssistant.Api.Configuration;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 
-namespace BrightProgramming.AiSupportAssistant.Api.Ai.Factory;
+namespace BrightProgramming.AiSupportAssistant.Api.Ai.Factories;
 
 public class AiProviderFactory : IAiProviderFactory
 {

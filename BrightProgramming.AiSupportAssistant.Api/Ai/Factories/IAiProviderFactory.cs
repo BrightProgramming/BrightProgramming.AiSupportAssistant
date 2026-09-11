@@ -1,4 +1,4 @@
-﻿namespace BrightProgramming.AiSupportAssistant.Api.Ai.Factory;
+﻿namespace BrightProgramming.AiSupportAssistant.Api.Ai.Factories;
 
 public interface IAiProviderFactory
 {

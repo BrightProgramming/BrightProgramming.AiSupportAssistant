@@ -1,4 +1,3 @@
-using BrightProgramming.AiSupportAssistant.Api.Services;
 using BrightProgramming.AiSupportAssistant.Api.StartupConfiguration;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +10,7 @@ builder.Services.AddOptions(builder.Configuration);
 builder.Services.AddMappers();
 builder.Services.AddAiProviders();
 builder.Services.AddApplicationServices();
+builder.Services.AddExceptionHandling();
 
 builder.Services.AddOpenApi();
 
@@ -22,10 +22,9 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
+app.UseExceptionHandler();
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();

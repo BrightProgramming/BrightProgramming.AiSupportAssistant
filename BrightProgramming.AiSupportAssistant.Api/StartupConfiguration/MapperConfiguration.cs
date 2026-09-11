@@ -1,4 +1,6 @@
-﻿using BrightProgramming.AiSupportAssistant.Api.Mappers;
+﻿namespace BrightProgramming.AiSupportAssistant.Api.StartupConfiguration;
+
+using BrightProgramming.AiSupportAssistant.Api.Mappers;
 
 public static class MapperConfiguration
 {

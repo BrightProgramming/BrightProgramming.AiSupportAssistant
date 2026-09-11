@@ -1,5 +1,5 @@
 ﻿using BrightProgramming.AiSupportAssistant.Api.Ai;
-using BrightProgramming.AiSupportAssistant.Api.Ai.Factory;
+using BrightProgramming.AiSupportAssistant.Api.Ai.Factories;
 using BrightProgramming.AiSupportAssistant.Api.Models;
 
 namespace BrightProgramming.AiSupportAssistant.Api.Services;

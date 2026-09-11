@@ -1,5 +1,5 @@
 ﻿using BrightProgramming.AiSupportAssistant.Api.Ai;
-using BrightProgramming.AiSupportAssistant.Api.Ai.Factory;
+using BrightProgramming.AiSupportAssistant.Api.Ai.Factories;
 using BrightProgramming.AiSupportAssistant.Api.Ai.OpenAi;
 using BrightProgramming.AiSupportAssistant.Api.Configuration;
 using Microsoft.Extensions.Options;

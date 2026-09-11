@@ -1,7 +1,9 @@
-﻿using BrightProgramming.AiSupportAssistant.Api.Configuration;
+﻿using BrightProgramming.AiSupportAssistant.Api.Ai.Exceptions;
+using BrightProgramming.AiSupportAssistant.Api.Configuration;
 using BrightProgramming.AiSupportAssistant.Api.Constants;
 using Microsoft.Extensions.Options;
 using OpenAI.Chat;
+using System.ClientModel;
 
 namespace BrightProgramming.AiSupportAssistant.Api.Ai.OpenAi;
 
@@ -24,23 +26,32 @@ public class OpenAiProvider : IAiProvider
 
     public async Task<string> GetAnswerAsync(string question)
     {
-        var messages = new ChatMessage[]
+        try
         {
-        new SystemChatMessage(SystemPrompt),
-        new UserChatMessage(question)
-        };
+            var messages = new ChatMessage[]
+            {
+                new SystemChatMessage(SystemPrompt),
+                new UserChatMessage(question)
+            };
 
-        var completion = await _chatClient.CompleteChatAsync(messages);
+            var completion = await _chatClient.CompleteChatAsync(messages);
 
-        var text = completion.Value.Content
-            .FirstOrDefault()?.Text;
+            var text = completion.Value.Content
+                .FirstOrDefault()?.Text;
 
-        if (string.IsNullOrWhiteSpace(text))
-        {
-            throw new InvalidOperationException(
-                "AI provider returned an empty response.");
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                throw new AiProviderException(
+                    "AI provider returned an empty response.");
+            }
+
+            return text;
         }
-
-        return text;
+        catch (ClientResultException ex)
+        {
+            throw new AiProviderException(
+                "The AI provider could not process the request.",
+                ex);
+        }
     }
 }

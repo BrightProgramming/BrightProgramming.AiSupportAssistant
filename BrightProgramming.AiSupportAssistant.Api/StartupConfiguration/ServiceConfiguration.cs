@@ -1,4 +1,6 @@
-﻿using BrightProgramming.AiSupportAssistant.Api.Services;
+﻿namespace BrightProgramming.AiSupportAssistant.Api.StartupConfiguration;
+
+using BrightProgramming.AiSupportAssistant.Api.Services;
 
 public static class ServiceConfiguration
 {

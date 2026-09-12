@@ -1,4 +1,5 @@
 <Solution>
   <Project Path="BrightProgramming.AiSupportAssistant.Api/BrightProgramming.AiSupportAssistant.Api.csproj" />
   <Project Path="BrightProgramming.AiSupportAssistant.Api.UnitTests/BrightProgramming.AiSupportAssistant.Api.UnitTests.csproj" />
+  <Project Path="BrightProgramming.AiSupportAssistant.Api.IntegrationTests/BrightProgramming.AiSupportAssistant.Api.IntegrationTests.csproj" />
 </Solution>

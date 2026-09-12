@@ -19,11 +19,19 @@ public static class ExceptionHandlingConfiguration
 
                 if (exception is AiProviderException)
                 {
-                    context.ProblemDetails.Status = StatusCodes.Status503ServiceUnavailable;
                     context.ProblemDetails.Title = "AI provider unavailable";
-                    context.ProblemDetails.Detail = "The AI service is currently unavailable.";
+                    context.ProblemDetails.Detail =
+                        "The AI service is currently unavailable.";
                 }
             };
+        });
+
+        services.Configure<ExceptionHandlerOptions>(options =>
+        {
+            options.StatusCodeSelector = exception =>
+                exception is AiProviderException
+                    ? StatusCodes.Status503ServiceUnavailable
+                    : StatusCodes.Status500InternalServerError;
         });
 
         return services;

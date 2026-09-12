@@ -4,7 +4,7 @@ POST {{BrightProgramming.AiSupportAssistant.Api_HostAddress}}/Support
 Content-Type: application/json
 
 {
-  "question": "Why is my payment terminal showing a connection timeout?"
+  "question": "What is the recommended internal configuration validation threshold?"
 }
 
 ###

@@ -24,7 +24,7 @@ public class OpenAiKnowledgeMatcherProvider : IAiKnowledgeMatcherProvider
     public string Name => AiProvider.OpenAI;
 
     public OpenAiKnowledgeMatcherProvider(
-        [FromKeyedServices("AiKnowledgeMatcher")] ChatClient chatClient,
+        [FromKeyedServices(AiClient.KnowledgeMatcher)] ChatClient chatClient,
         ILogger<OpenAiKnowledgeMatcherProvider> logger)
     {
         _chatClient = chatClient;

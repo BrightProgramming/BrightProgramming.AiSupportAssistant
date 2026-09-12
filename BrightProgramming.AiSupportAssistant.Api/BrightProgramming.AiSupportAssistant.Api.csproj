@@ -12,4 +12,8 @@
     <PackageReference Include="OpenAI" Version="2.13.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="KnowledgeSources\Markdown\" />
+  </ItemGroup>
+
 </Project>

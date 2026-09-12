@@ -1,5 +1,5 @@
 ﻿using BrightProgramming.AiSupportAssistant.Api.Ai.Answer.Factory;
-using BrightProgramming.AiSupportAssistant.Api.Ai.Answer.Providers;
+using BrightProgramming.AiSupportAssistant.Api.Ai.Answer.Processor;
 using BrightProgramming.AiSupportAssistant.Api.Knowledge;
 using BrightProgramming.AiSupportAssistant.Api.Knowledge.Factory;
 using BrightProgramming.AiSupportAssistant.Api.Knowledge.Providers;
@@ -9,16 +9,16 @@ namespace BrightProgramming.AiSupportAssistant.Api.Services;
 
 public class SupportService : ISupportService
 {
-    private readonly IAiAnswerProvider _aiAnswerProvider;
+    private readonly IAiAnswerProcessor _aiAnswerProcessor;
     private readonly IKnowledgeProvider _knowledgeProvider;
     private readonly IKnowledgeMatcher _knowledgeMatcher;
 
     public SupportService(
-        IAiAnswerProviderFactory aiProviderFactory,
+        IAiAnswerProcessor aiAnswerProcessor,
         IKnowledgeProviderFactory knowledgeProviderFactory,
         IKnowledgeMatcher knowledgeMatcher)
     {
-        _aiAnswerProvider = aiProviderFactory.GetProvider();
+        _aiAnswerProcessor = aiAnswerProcessor;
         _knowledgeProvider = knowledgeProviderFactory.GetProvider();
         _knowledgeMatcher = knowledgeMatcher;
     }
@@ -35,8 +35,9 @@ public class SupportService : ISupportService
             knowledge,
             cancellationToken);
 
-        var answer = await _aiAnswerProvider.GetAnswerAsync(
+        var answer = await _aiAnswerProcessor.GetAnswerAsync(
             request.Question,
+            matchedKnowledge,
             cancellationToken);
 
         return new SupportResponse

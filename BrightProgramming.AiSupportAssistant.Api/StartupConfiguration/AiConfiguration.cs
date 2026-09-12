@@ -7,6 +7,7 @@ using BrightProgramming.AiSupportAssistant.Api.Ai.Matcher.Processor;
 using BrightProgramming.AiSupportAssistant.Api.Ai.Matcher.Providers;
 using BrightProgramming.AiSupportAssistant.Api.Ai.Matcher.Providers.OpenAi;
 using BrightProgramming.AiSupportAssistant.Api.Configuration;
+using BrightProgramming.AiSupportAssistant.Api.Constants;
 using Microsoft.Extensions.Options;
 using OpenAI.Chat;
 
@@ -18,7 +19,7 @@ public static class AiConfiguration
         this IServiceCollection services)
     {
         services.AddKeyedSingleton<ChatClient>(
-            "AiAnswer",
+            AiClient.Answer,
             (serviceProvider, _) =>
             {
                 var options = serviceProvider
@@ -31,7 +32,7 @@ public static class AiConfiguration
             });
 
         services.AddKeyedSingleton<ChatClient>(
-            "AiKnowledgeMatcher",
+            AiClient.KnowledgeMatcher,
             (serviceProvider, _) =>
             {
                 var options = serviceProvider

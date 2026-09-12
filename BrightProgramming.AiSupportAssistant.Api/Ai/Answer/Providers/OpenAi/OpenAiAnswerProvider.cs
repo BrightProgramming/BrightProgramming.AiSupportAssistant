@@ -1,6 +1,6 @@
-﻿using BrightProgramming.AiSupportAssistant.Api.Ai.Answer.Providers;
-using BrightProgramming.AiSupportAssistant.Api.Ai.Exceptions;
+﻿using BrightProgramming.AiSupportAssistant.Api.Ai.Exceptions;
 using BrightProgramming.AiSupportAssistant.Api.Constants;
+using BrightProgramming.AiSupportAssistant.Api.Knowledge.Models;
 using OpenAI.Chat;
 using System.ClientModel;
 using System.Diagnostics;
@@ -9,7 +9,11 @@ namespace BrightProgramming.AiSupportAssistant.Api.Ai.Answer.Providers.OpenAi;
 
 public class OpenAiAnswerProvider : IAiAnswerProvider
 {
-    private const string SystemPrompt = "You are a helpful technical support assistant. Provide clear, concise and practical answers.";
+    private const string SystemPrompt =
+        "You are a helpful technical support assistant. " +
+        "Provide clear, concise and practical answers using only the supplied knowledge. " +
+        "If the supplied knowledge does not contain enough information to answer the question, " +
+        "say so clearly rather than inventing an answer.";
 
     private readonly ChatClient _chatClient;
     private readonly ILogger<OpenAiAnswerProvider> _logger;
@@ -17,7 +21,7 @@ public class OpenAiAnswerProvider : IAiAnswerProvider
     public string Name => AiProvider.OpenAI;
 
     public OpenAiAnswerProvider(
-        [FromKeyedServices("AiAnswer")] ChatClient chatClient,
+        [FromKeyedServices(AiClient.Answer)] ChatClient chatClient,
         ILogger<OpenAiAnswerProvider> logger)
     {
         _chatClient = chatClient;
@@ -26,20 +30,42 @@ public class OpenAiAnswerProvider : IAiAnswerProvider
 
     public async Task<string> GetAnswerAsync(
         string question,
+        KnowledgeContext knowledge,
         CancellationToken cancellationToken)
     {
         var stopwatch = Stopwatch.StartNew();
-        _logger.LogInformation("Sending AI request using provider {Provider}. TraceId: {TraceId}", Name, Activity.Current?.Id);
+
+        _logger.LogInformation(
+            "Sending AI request using provider {Provider}. TraceId: {TraceId}",
+            Name,
+            Activity.Current?.Id);
 
         try
         {
+            var knowledgeText = string.Join(
+                "\n\n",
+                knowledge.Documents.Select(document =>
+                    $"## {document.Name}\n{document.Content}"));
+
             var messages = new ChatMessage[]
             {
                 new SystemChatMessage(SystemPrompt),
-                new UserChatMessage(question)
+
+                new UserChatMessage(
+                    $"""
+                    Knowledge:
+
+                    {knowledgeText}
+
+                    Question:
+
+                    {question}
+                    """)
             };
 
-            var completion = await _chatClient.CompleteChatAsync(messages, cancellationToken: cancellationToken);
+            var completion = await _chatClient.CompleteChatAsync(
+                messages,
+                cancellationToken: cancellationToken);
 
             _logger.LogInformation(
                 "AI request completed successfully using provider {Provider} in {ElapsedMilliseconds} ms. TraceId: {TraceId}",
@@ -58,7 +84,8 @@ public class OpenAiAnswerProvider : IAiAnswerProvider
 
             return text;
         }
-        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        catch (OperationCanceledException)
+            when (cancellationToken.IsCancellationRequested)
         {
             _logger.LogInformation(
                 "AI request was cancelled by the caller. Provider: {Provider}. TraceId: {TraceId}",

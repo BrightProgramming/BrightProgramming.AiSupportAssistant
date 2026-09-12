@@ -1,43 +1,33 @@
-﻿using BrightProgramming.AiSupportAssistant.Api.Ai.Answer.Factory;
-using BrightProgramming.AiSupportAssistant.Api.Ai.Answer.Processor;
-using BrightProgramming.AiSupportAssistant.Api.Knowledge;
-using BrightProgramming.AiSupportAssistant.Api.Knowledge.Factory;
-using BrightProgramming.AiSupportAssistant.Api.Knowledge.Providers;
+﻿using BrightProgramming.AiSupportAssistant.Api.Ai.Answer.Processor;
 using BrightProgramming.AiSupportAssistant.Api.Models;
+using BrightProgramming.AiSupportAssistant.Api.Knowledge.Processor;
 
 namespace BrightProgramming.AiSupportAssistant.Api.Services;
 
 public class SupportService : ISupportService
 {
     private readonly IAiAnswerProcessor _aiAnswerProcessor;
-    private readonly IKnowledgeProvider _knowledgeProvider;
-    private readonly IKnowledgeMatcher _knowledgeMatcher;
+    private readonly IKnowledgeProcessor _knowledgeProcessor;
 
     public SupportService(
         IAiAnswerProcessor aiAnswerProcessor,
-        IKnowledgeProviderFactory knowledgeProviderFactory,
-        IKnowledgeMatcher knowledgeMatcher)
+        IKnowledgeProcessor knowledgeProcessor)
     {
         _aiAnswerProcessor = aiAnswerProcessor;
-        _knowledgeProvider = knowledgeProviderFactory.GetProvider();
-        _knowledgeMatcher = knowledgeMatcher;
+        _knowledgeProcessor = knowledgeProcessor;
     }
 
     public async Task<SupportResponse> GetAnswerAsync(
         SupportRequest request,
         CancellationToken cancellationToken)
     {
-        var knowledge = await _knowledgeProvider.GetKnowledgeAsync(
-            cancellationToken);
-
-        var matchedKnowledge = await _knowledgeMatcher.MatchAsync(
+        var knowledge = await _knowledgeProcessor.GetRelevantKnowledgeAsync(
             request.Question,
-            knowledge,
             cancellationToken);
 
         var answer = await _aiAnswerProcessor.GetAnswerAsync(
             request.Question,
-            matchedKnowledge,
+            knowledge,
             cancellationToken);
 
         return new SupportResponse

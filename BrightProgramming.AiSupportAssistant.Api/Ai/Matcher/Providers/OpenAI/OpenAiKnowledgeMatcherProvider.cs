@@ -31,9 +31,9 @@ public class OpenAiKnowledgeMatcherProvider : IAiKnowledgeMatcherProvider
         _logger = logger;
     }
 
-    public async Task<IReadOnlyCollection<KnowledgeDocument>> MatchAsync(
+    public async Task<KnowledgeContext> MatchAsync(
         string question,
-        IReadOnlyCollection<KnowledgeDocument> documents,
+        KnowledgeContext knowledge,
         CancellationToken cancellationToken)
     {
         var stopwatch = Stopwatch.StartNew();
@@ -47,7 +47,7 @@ public class OpenAiKnowledgeMatcherProvider : IAiKnowledgeMatcherProvider
         {
             var documentList = string.Join(
                 Environment.NewLine + Environment.NewLine,
-                documents.Select(document =>
+                knowledge.Documents.Select(document =>
                     $"DOCUMENT: {document.Name}{Environment.NewLine}{document.Content}"));
 
             var userPrompt =
@@ -103,7 +103,7 @@ public class OpenAiKnowledgeMatcherProvider : IAiKnowledgeMatcherProvider
                     "AI provider returned an invalid knowledge matching response.");
             }
 
-            var matchedDocuments = documents
+            var matchedDocuments = knowledge.Documents
                 .Where(document => response.RelevantDocuments.Contains(
                     document.Name,
                     StringComparer.OrdinalIgnoreCase))
@@ -116,7 +116,10 @@ public class OpenAiKnowledgeMatcherProvider : IAiKnowledgeMatcherProvider
                 matchedDocuments.Length,
                 Activity.Current?.Id);
 
-            return matchedDocuments;
+            return new KnowledgeContext
+            {
+                Documents = matchedDocuments
+            };
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {

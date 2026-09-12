@@ -9,7 +9,7 @@ public class MarkdownKnowledgeProvider : IKnowledgeProvider
 {
     private readonly KnowledgeSourceOptions _options;
     private readonly ILogger<MarkdownKnowledgeProvider> _logger;
-    private readonly List<KnowledgeDocument> _documents = [];
+    private readonly Lazy<KnowledgeContext> _knowledge;
 
     public string Name => KnowledgeProvider.Markdown;
 
@@ -20,44 +20,57 @@ public class MarkdownKnowledgeProvider : IKnowledgeProvider
         _options = options.Value;
         _logger = logger;
 
-        LoadDocuments();
+        _knowledge = new Lazy<KnowledgeContext>(LoadDocuments);
     }
 
     public Task<KnowledgeContext> GetKnowledgeAsync(
         CancellationToken cancellationToken)
     {
-        var context = new KnowledgeContext
-        {
-            Documents = _documents
-        };
-
-        return Task.FromResult(context);
+        return Task.FromResult(_knowledge.Value);
     }
 
-    private void LoadDocuments()
+    private KnowledgeContext LoadDocuments()
     {
         var path = Path.GetFullPath(_options.Path);
 
         if (!Directory.Exists(path))
         {
-            _logger.LogWarning("Knowledge directory does not exist: {Path}", path);
+            _logger.LogWarning(
+                "Knowledge directory does not exist: {Path}",
+                path);
 
-            return;
+            return new KnowledgeContext
+            {
+                Documents = []
+            };
         }
 
-        var files = Directory.GetFiles(path, "*.md", SearchOption.AllDirectories);
+        var documents = new List<KnowledgeDocument>();
+
+        var files = Directory.GetFiles(
+            path,
+            "*.md",
+            SearchOption.AllDirectories);
 
         foreach (var file in files)
         {
             var content = File.ReadAllText(file);
 
-            _documents.Add(new KnowledgeDocument
+            documents.Add(new KnowledgeDocument
             {
                 Name = Path.GetFileName(file),
                 Content = content
             });
         }
 
-        _logger.LogInformation("Loaded {DocumentCount} knowledge documents from {Path}", _documents.Count, path);
+        _logger.LogInformation(
+            "Loaded {DocumentCount} knowledge documents from {Path}",
+            documents.Count,
+            path);
+
+        return new KnowledgeContext
+        {
+            Documents = documents
+        };
     }
 }

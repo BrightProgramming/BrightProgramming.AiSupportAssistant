@@ -1,4 +1,5 @@
 ﻿using BrightProgramming.AiSupportAssistant.Api.Ai.Answer.Providers;
+using BrightProgramming.AiSupportAssistant.Api.Configuration;
 using Microsoft.Extensions.Options;
 
 namespace BrightProgramming.AiSupportAssistant.Api.Ai.Answer.Factory;

@@ -6,8 +6,8 @@ public interface IAiKnowledgeMatcherProvider
 {
     string Name { get; }
 
-    Task<IReadOnlyCollection<KnowledgeDocument>> MatchAsync(
+    Task<KnowledgeContext> MatchAsync(
         string question,
-        IReadOnlyCollection<KnowledgeDocument> documents,
+        KnowledgeContext knowledge,
         CancellationToken cancellationToken);
 }

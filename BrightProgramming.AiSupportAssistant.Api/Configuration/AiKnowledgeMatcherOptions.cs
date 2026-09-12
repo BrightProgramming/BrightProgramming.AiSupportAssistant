@@ -1,7 +1,6 @@
-﻿namespace BrightProgramming.AiSupportAssistant.Api.Configuration
+﻿namespace BrightProgramming.AiSupportAssistant.Api.Configuration;
+
+public class AiKnowledgeMatcherOptions
 {
-    public class AiKnowledgeMatcherOptions
-    {
-        public required string Provider { get; init; }
-    }
+    public required string Provider { get; init; }
 }

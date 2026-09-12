@@ -1,28 +1,27 @@
 ﻿using BrightProgramming.AiSupportAssistant.Api.Ai.Matcher.Factory;
+using BrightProgramming.AiSupportAssistant.Api.Ai.Matcher.Providers;
 using BrightProgramming.AiSupportAssistant.Api.Knowledge.Models;
 
 namespace BrightProgramming.AiSupportAssistant.Api.Ai.Matcher.Processor;
 
 public class AiKnowledgeProcessor : IAiKnowledgeProcessor
 {
-    private readonly IAiKnowledgeMatcherFactory _aiKnowledgeMatcherFactory;
+    private readonly IAiKnowledgeMatcherProvider _aiKnowledgeMatcherProvider;
 
     public AiKnowledgeProcessor(
         IAiKnowledgeMatcherFactory aiKnowledgeMatcherFactory)
     {
-        _aiKnowledgeMatcherFactory = aiKnowledgeMatcherFactory;
+        _aiKnowledgeMatcherProvider = aiKnowledgeMatcherFactory.GetProvider();
     }
 
-    public Task<IReadOnlyCollection<KnowledgeDocument>> MatchAsync(
+    public Task<KnowledgeContext> MatchAsync(
         string question,
-        IReadOnlyCollection<KnowledgeDocument> documents,
+        KnowledgeContext knowledge,
         CancellationToken cancellationToken)
     {
-        var provider = _aiKnowledgeMatcherFactory.GetProvider();
-
-        return provider.MatchAsync(
+        return _aiKnowledgeMatcherProvider.MatchAsync(
             question,
-            documents,
+            knowledge,
             cancellationToken);
     }
 }

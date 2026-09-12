@@ -1,9 +1,8 @@
 ﻿using BrightProgramming.AiSupportAssistant.Api.Knowledge.Providers;
 
-namespace BrightProgramming.AiSupportAssistant.Api.Knowledge.Factory
+namespace BrightProgramming.AiSupportAssistant.Api.Knowledge.Factory;
+
+public interface IKnowledgeProviderFactory
 {
-    public interface IKnowledgeProviderFactory
-    {
-        IKnowledgeProvider GetProvider();
-    }
+    IKnowledgeProvider GetProvider();
 }

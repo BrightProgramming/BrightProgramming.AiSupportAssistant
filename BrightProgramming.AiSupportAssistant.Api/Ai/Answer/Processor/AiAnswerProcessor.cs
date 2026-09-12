@@ -1,16 +1,17 @@
 ﻿using BrightProgramming.AiSupportAssistant.Api.Ai.Answer.Factory;
+using BrightProgramming.AiSupportAssistant.Api.Ai.Answer.Providers;
 using BrightProgramming.AiSupportAssistant.Api.Knowledge.Models;
 
 namespace BrightProgramming.AiSupportAssistant.Api.Ai.Answer.Processor;
 
 public class AiAnswerProcessor : IAiAnswerProcessor
 {
-    private readonly IAiAnswerProviderFactory _aiAnswerProviderFactory;
+    private readonly IAiAnswerProvider _aiAnswerProvider;
 
     public AiAnswerProcessor(
         IAiAnswerProviderFactory aiAnswerProviderFactory)
     {
-        _aiAnswerProviderFactory = aiAnswerProviderFactory;
+        _aiAnswerProvider = aiAnswerProviderFactory.GetProvider();
     }
 
     public Task<string> GetAnswerAsync(
@@ -18,9 +19,7 @@ public class AiAnswerProcessor : IAiAnswerProcessor
         KnowledgeContext knowledge,
         CancellationToken cancellationToken)
     {
-        var provider = _aiAnswerProviderFactory.GetProvider();
-
-        return provider.GetAnswerAsync(
+        return _aiAnswerProvider.GetAnswerAsync(
             question,
             knowledge,
             cancellationToken);

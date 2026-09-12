@@ -4,8 +4,8 @@ namespace BrightProgramming.AiSupportAssistant.Api.Ai.Matcher.Processor;
 
 public interface IAiKnowledgeProcessor
 {
-    Task<IReadOnlyCollection<KnowledgeDocument>> MatchAsync(
+    Task<KnowledgeContext> MatchAsync(
         string question,
-        IReadOnlyCollection<KnowledgeDocument> documents,
+        KnowledgeContext knowledge,
         CancellationToken cancellationToken);
 }

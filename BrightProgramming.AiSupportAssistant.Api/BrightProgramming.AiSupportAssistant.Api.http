@@ -4,7 +4,7 @@ POST {{BrightProgramming.AiSupportAssistant.Api_HostAddress}}/Support
 Content-Type: application/json
 
 {
-  "question": "What is the recommended internal configuration validation threshold?"
+  "question": "How do I implement a binary search tree in C#?"
 }
 
 ###

@@ -1,34 +1,45 @@
-# Project Structure
+# Project structure
 
-The solution contains four projects.
+The source is organised around application responsibilities.
 
-| Project | Purpose |
-|---|---|
-| `BrightProgramming.AiSupportAssistant.Api` | ASP.NET Core API and application logic |
-| `BrightProgramming.AiSupportAssistant.Web` | Blazor Web user interface |
-| `BrightProgramming.AiSupportAssistant.Api.UnitTests` | API unit tests |
-| `BrightProgramming.AiSupportAssistant.Api.IntegrationTests` | API integration tests |
+```text
+BrightProgramming.AiSupportAssistant.Api/
+├── Ai/
+│   ├── Answer/
+│   ├── Matcher/
+│   └── Exceptions/
+├── Configuration/
+├── Constants/
+├── Controllers/
+├── Knowledge/
+│   ├── Factory/
+│   ├── Models/
+│   ├── Processor/
+│   ├── Providers/
+│   └── Repository/
+├── Mappers/
+├── Models/
+├── Services/
+└── StartupConfiguration/
 
-## API structure
+BrightProgramming.AiSupportAssistant.Web/
+├── Components/
+├── Models/
+└── Services/
 
-The main API areas are:
+Api.UnitTests/
+Api.IntegrationTests/
+```
 
-- `Controllers` — HTTP endpoints.
-- `Services` — application orchestration.
-- `Knowledge` — providers, repository, models and processing.
-- `Ai/Answer` — answer processor, factory and providers.
-- `Ai/Matcher` — knowledge-matching processor, factory and providers.
-- `Configuration` — strongly typed options.
-- `StartupConfiguration` — dependency injection and middleware registration.
-- `Mappers` — API/application model mapping.
-- `KnowledgeSources/Markdown` — current knowledge documents.
+## Where to look
 
-## Web structure
+- Request handling: `Controllers`
+- Workflow: `Services`
+- Knowledge: `Knowledge`
+- AI answer generation: `Ai/Answer`
+- AI knowledge matching: `Ai/Matcher`
+- Configuration: `Configuration` and `StartupConfiguration`
+- UI: `Web/Components`
+- API tests: the two test projects
 
-The Web project contains Razor components under `Components`, a small HTTP service under `Services`, and static assets under `wwwroot`.
-
-The main page is `Components/Pages/Support.razor`.
-
-## Tests
-
-Unit tests mirror the API's major responsibilities. Integration tests use `WebApplicationFactory` and replace the knowledge and answer processors with test implementations.
+The `KnowledgeSources/Markdown` directory contains the Markdown knowledge used by the current provider.

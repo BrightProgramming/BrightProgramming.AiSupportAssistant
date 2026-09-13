@@ -1,54 +1,48 @@
-# Provider Model
+# Provider model
 
-The application uses interfaces, factories and dependency injection to keep infrastructure implementations separate from the support workflow.
+The application has three independent provider abstractions.
 
 ![Provider model](../images/provider-model.png)
 
-## Three provider types
+## Knowledge provider
 
-The source contains three independent provider abstractions:
+`IKnowledgeProvider` supplies a `KnowledgeContext`.
 
-| Capability | Interface | Current implementation |
-|---|---|---|
-| Knowledge | `IKnowledgeProvider` | `MarkdownKnowledgeProvider` |
-| Knowledge matching | `IAiKnowledgeMatcherProvider` | `OpenAiKnowledgeMatcherProvider` |
-| Answer generation | `IAiAnswerProvider` | `OpenAiAnswerProvider` |
+The factory is `IKnowledgeProviderFactory`.
 
-Each provider exposes a `Name` and is selected by its corresponding factory.
+The current implementation is `MarkdownKnowledgeProvider`, backed by `IKnowledgeRepository` and `MarkdownKnowledgeRepository`.
 
-## Factories
+## Knowledge matcher provider
 
-The factories receive all registered implementations and compare their `Name` with the configured provider name, ignoring case.
+`IAiKnowledgeMatcherProvider` receives a question and available knowledge and returns a `KnowledgeContext` containing the documents selected as relevant.
 
-- `KnowledgeProviderFactory`
-- `AiKnowledgeMatcherFactory`
-- `AiAnswerProviderFactory`
+The factory is `IAiKnowledgeMatcherFactory`.
 
-If no implementation matches, the factory throws `InvalidOperationException`. Multiple matching implementations also cause the selection to fail.
+The current implementation is `OpenAiKnowledgeMatcherProvider`.
 
-## Dependency injection
+## Answer provider
 
-`KnowledgeConfiguration` registers the knowledge repository, provider, factory and processor as singletons.
+`IAiAnswerProvider` receives the question and relevant knowledge and returns the generated answer.
 
-`AiConfiguration` registers the two keyed `ChatClient` instances plus the AI providers, factories and processors as singletons.
+The factory is `IAiAnswerProviderFactory`.
 
-`ServiceConfiguration` registers `SupportService` as scoped.
+The current implementation is `OpenAiAnswerProvider`.
 
-## Adding a provider
+## Selection
 
-A new implementation can follow the existing pattern:
+Each factory receives all registered providers plus its corresponding options object.
 
-1. Implement the appropriate provider interface.
-2. Give it a unique `Name`.
-3. Register it with dependency injection.
-4. Configure that name in the relevant options section.
+The configured provider name is matched against the provider's `Name` property, ignoring case.
 
-For knowledge providers, add repository infrastructure when the source requires it.
+An unregistered name, or multiple matching providers, causes the factory construction to fail.
 
-The processors and `SupportService` can continue to depend on their abstractions.
+## Extensibility
 
-## Important detail
+A new implementation must:
 
-Knowledge matching and answer generation are separate provider concerns. Replacing the answer provider does not require replacing the knowledge matcher, and vice versa.
+1. Implement the relevant provider interface.
+2. Register it with dependency injection.
+3. Give it the configured provider name.
+4. Add the required configuration and supporting infrastructure.
 
-The same separation applies to knowledge retrieval: the provider abstraction is distinct from `IKnowledgeRepository`.
+The relevant processor and `SupportService` do not need to know the concrete implementation.

@@ -1,33 +1,35 @@
 # Development
 
-The solution is organised into a Web application, an API and two test projects.
+The solution contains four projects:
 
-## Applications
+- `BrightProgramming.AiSupportAssistant.Api`
+- `BrightProgramming.AiSupportAssistant.Web`
+- `BrightProgramming.AiSupportAssistant.Api.UnitTests`
+- `BrightProgramming.AiSupportAssistant.Api.IntegrationTests`
 
-`BrightProgramming.AiSupportAssistant.Web` is a Blazor Web application using interactive server components.
+The API and Web projects both target .NET 10.
 
-`BrightProgramming.AiSupportAssistant.Api` is an ASP.NET Core Web API. Its responsibilities are divided into controllers, services, knowledge processing, AI processing, configuration and startup registration.
+## API
 
-## Development principles
+The API uses ASP.NET Core controllers, options binding, dependency injection, Problem Details, and the OpenAI client library.
 
-The API uses constructor injection and interfaces for application dependencies.
+Startup registration is split into focused extension methods:
 
-Provider selection is configuration-driven through factories rather than hard-coded in the processors.
+- `AddOptions`
+- `AddMappers`
+- `AddAi`
+- `AddKnowledge`
+- `AddApplicationServices`
+- `AddExceptionHandling`
 
-Knowledge storage is separated from knowledge provision through `IKnowledgeRepository` and `IKnowledgeProvider`.
+## Web
 
-AI knowledge matching and answer generation have separate provider abstractions.
+The web project is a Blazor Web App using Interactive Server components.
 
-## Source layout
+The UI is split into components for the hero, question entry and answer rendering.
 
-See [Project Structure](project-structure.md) for the main folders and classes.
+## Development principle
 
-## Extending the system
+Keep orchestration separate from provider implementations.
 
-See [Extending Providers](extending-providers.md) for the provider registration and configuration pattern.
-
-## Testing
-
-The project contains unit tests for controllers, mapping, services, processors, factories, providers and startup configuration.
-
-The API also has integration tests covering successful requests, validation failures, AI provider failures and dependency injection resolution.
+When adding infrastructure, prefer an interface, a concrete implementation, DI registration and configuration rather than coupling the workflow directly to the infrastructure.

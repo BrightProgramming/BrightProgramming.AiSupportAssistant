@@ -1,34 +1,42 @@
 # Testing
 
-The solution contains unit tests and API integration tests.
+The API has both unit and integration tests.
 
 ## Unit tests
 
 The unit-test project covers:
 
-- `SupportController`
+- Controllers and model mapping
 - `SupportService`
-- `SupportApiMapper`
-- Knowledge providers, processors and factories
-- AI answer and knowledge-matcher processors, providers and factories
-- Startup configuration and options validation
+- Knowledge processing
+- Markdown knowledge loading and caching
+- Provider factories
+- AI processors and providers
+- Options validation
+- Dependency-injection registration
 - Exception handling
 
-Provider tests use mocked `ChatClient` instances where appropriate.
+Provider tests cover successful calls, provider failures, cancellation, and client failures.
 
 ## Integration tests
 
-`SupportApiIntegrationTests` uses `WebApplicationFactory<Program>` to exercise the API endpoint.
+`SupportApiIntegrationTests` runs the API through `WebApplicationFactory`.
 
-The tests replace `IKnowledgeProcessor` and `IAiAnswerProcessor` with stubs so the endpoint can be tested without making real AI requests.
+The tests replace the real knowledge and answer processors with stubs so the HTTP pipeline can be exercised without calling OpenAI.
 
 Covered scenarios include:
 
-- Successful POST returning the mapped question and answer.
-- Invalid requests returning `400 Bad Request` problem details.
-- `AiProviderException` returning `503 Service Unavailable` with an appropriate problem-details message.
-- Resolving application services from dependency injection.
+- Successful `POST /Support`
+- Invalid request returning `400`
+- `AiProviderException` returning `503` Problem Details
+- Application services resolving from dependency injection
 
 ## Running tests
 
-The test projects target .NET 10 and can be run using the normal .NET test tooling or from the test runner in an IDE such as Visual Studio.
+From the repository root:
+
+```text
+dotnet test
+```
+
+The test projects target .NET 10.

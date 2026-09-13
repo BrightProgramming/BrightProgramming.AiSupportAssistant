@@ -1,37 +1,42 @@
-# Architecture Overview
+# Architecture overview
 
-The AI Support Assistant separates the web UI, API boundary, application orchestration, knowledge processing and AI integrations.
+The application separates the user interface, HTTP boundary, workflow orchestration, knowledge processing, and AI integrations.
 
 ![Architecture overview](../images/architecture-overview.png)
 
 ## Main components
 
-- **Web** — Blazor Web application that collects questions and renders Markdown answers.
-- **API** — ASP.NET Core API exposing the `/Support` POST endpoint.
-- **SupportService** — Coordinates knowledge retrieval and answer generation.
-- **Knowledge processing** — Retrieves available knowledge and asks an AI matcher to identify relevant documents.
-- **AI answer processing** — Passes the question and relevant knowledge to the configured answer provider.
+- **Web application** — Blazor Web App using Interactive Server rendering.
+- **API** — ASP.NET Core controller-based API.
+- **SupportService** — coordinates the support workflow.
+- **KnowledgeProcessor** — retrieves knowledge and invokes knowledge matching.
+- **AiKnowledgeProcessor** — delegates relevance matching to a provider.
+- **AiAnswerProcessor** — delegates answer generation to a provider.
 
-## Provider model
+## Provider boundaries
 
-Three independent provider abstractions are used:
+Three provider abstractions are deliberately separate:
 
-- `IKnowledgeProvider` — supplies available knowledge.
-- `IAiKnowledgeMatcherProvider` — identifies relevant knowledge.
-- `IAiAnswerProvider` — generates the final answer.
+- `IKnowledgeProvider`
+- `IAiKnowledgeMatcherProvider`
+- `IAiAnswerProvider`
 
-Each has a corresponding factory that selects the configured implementation.
+Factories select the configured implementation for each abstraction.
 
 ## Current implementations
 
-The current configuration uses:
+The current source provides:
 
-- `MarkdownKnowledgeProvider` backed by `MarkdownKnowledgeRepository`.
-- `OpenAiKnowledgeMatcherProvider` for knowledge matching.
-- `OpenAiAnswerProvider` for answer generation.
+- `MarkdownKnowledgeProvider`
+- `OpenAiKnowledgeMatcherProvider`
+- `OpenAiAnswerProvider`
 
-The detailed request lifecycle is described in [Application Flow](application-flow.md).
+Dependency injection registers these implementations as singletons.
 
-The provider extension model is described in [Provider Model](provider-model.md).
+The `SupportService` is scoped.
 
-The knowledge implementation is described in [Knowledge Architecture](knowledge-architecture.md).
+## Key principle
+
+The core workflow works with processors and abstractions rather than concrete knowledge or AI implementations.
+
+This makes the three infrastructure responsibilities independently replaceable without requiring the `SupportService` to know which concrete provider is selected.

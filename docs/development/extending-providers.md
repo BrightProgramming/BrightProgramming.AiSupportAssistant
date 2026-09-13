@@ -1,39 +1,39 @@
-# Extending Providers
+# Extending providers
 
-The provider model is designed to allow alternative implementations without changing the support workflow.
+The provider model is designed to allow alternative implementations.
 
-## Knowledge provider
+There are three provider interfaces to consider.
 
-Implement `IKnowledgeProvider` and provide a `Name` that identifies the implementation.
+## Knowledge
 
-Register the implementation with dependency injection and configure `KnowledgeSource:Provider` with the same name.
+Implement `IKnowledgeProvider`.
 
-If the provider needs storage access, it can depend on `IKnowledgeRepository` or another appropriate abstraction.
+If storage access needs its own abstraction, implement `IKnowledgeRepository` as well.
 
-## Knowledge matcher
+Register the provider and repository with dependency injection and configure the provider name through `KnowledgeSource:Provider`.
 
-Implement `IAiKnowledgeMatcherProvider` with a unique `Name`.
+## Knowledge matching
 
-Register it with dependency injection and configure `AiKnowledgeMatcher:Provider` to select it.
+Implement `IAiKnowledgeMatcherProvider`.
 
-The provider receives the user's question and the available `KnowledgeContext` and returns the relevant context.
+Register it with dependency injection and configure `AiKnowledgeMatcher:Provider` with its `Name`.
 
-## Answer provider
+The provider receives the question and complete available `KnowledgeContext`.
 
-Implement `IAiAnswerProvider` with a unique `Name`.
+## Answer generation
 
-Register it with dependency injection and configure `AiAnswer:Provider` to select it.
+Implement `IAiAnswerProvider`.
 
-The provider receives the original question and the matched `KnowledgeContext` and returns the answer text.
+Register it with dependency injection and configure `AiAnswer:Provider` with its `Name`.
 
-## Factory behaviour
+The provider receives the original question and matched `KnowledgeContext`.
 
-Each factory receives `IEnumerable<TProvider>` from dependency injection and selects the provider whose `Name` matches the configured value, ignoring case.
+## Important detail
 
-No matching provider causes an `InvalidOperationException`. More than one matching provider also causes an exception.
+Provider factories use `SingleOrDefault` against the `Name` property.
 
-## AI clients
+Provider names are compared case-insensitively.
 
-The current OpenAI implementation uses two keyed `ChatClient` registrations: one for answer generation and one for knowledge matching.
+If the configured name has no registered match, or more than one registered provider matches, factory resolution fails with `InvalidOperationException`.
 
-A replacement implementation can use different dependencies without changing the processor or `SupportService` contracts.
+Provider-specific clients and options should be kept behind the provider implementation where practical.

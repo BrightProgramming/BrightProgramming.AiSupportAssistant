@@ -1,48 +1,35 @@
-# Knowledge Architecture
+# Knowledge architecture
 
-The knowledge subsystem separates storage access, knowledge provision and AI-based relevance matching.
+Knowledge retrieval and knowledge matching are separate stages.
 
 ![Knowledge flow](../images/knowledge-flow.png)
 
-## Storage
+## Retrieval
 
-`IKnowledgeRepository` defines access to the underlying knowledge store.
+`KnowledgeProcessor` obtains the configured `IKnowledgeProvider`.
 
-The current `MarkdownKnowledgeRepository`:
+The current path is:
 
-- Resolves the configured path to a full path.
-- Recursively finds `*.md` files.
-- Reads each file as text.
-- Creates a `KnowledgeDocument` containing the file name and content.
+`KnowledgeProcessor` → `KnowledgeProviderFactory` → `MarkdownKnowledgeProvider` → `MarkdownKnowledgeRepository`
 
-If the directory does not exist, it logs a warning and returns an empty collection.
+The repository reads Markdown files and creates `KnowledgeDocument` instances.
 
-## Knowledge provider
+The provider wraps those documents in a `KnowledgeContext` and caches it.
 
-`IKnowledgeProvider` exposes `GetKnowledgeAsync` and supplies a `KnowledgeContext`.
+## Matching
 
-`MarkdownKnowledgeProvider` delegates document loading to `IKnowledgeRepository` and wraps the documents in a `KnowledgeContext`.
+`KnowledgeProcessor` passes the available `KnowledgeContext` to `IAiKnowledgeProcessor`.
 
-It uses `Lazy<KnowledgeContext>`, so the documents are loaded once and the same context is returned on subsequent calls.
+`AiKnowledgeProcessor` obtains its configured `IAiKnowledgeMatcherProvider` through `IAiKnowledgeMatcherFactory`.
 
-## Knowledge processor
+The current matcher is `OpenAiKnowledgeMatcherProvider`.
 
-`KnowledgeProcessor` obtains the configured provider through `IKnowledgeProviderFactory`.
+It asks OpenAI to identify relevant document names, deserializes the JSON response, and constructs a new context containing only matching documents.
 
-It retrieves the available knowledge and passes it, together with the question, to `IAiKnowledgeProcessor`.
+## Why separate the stages?
 
-The processor returns the context produced by the matcher.
+The source of knowledge and the mechanism used to decide relevance are different concerns.
 
-## AI knowledge matching
+A different knowledge source can therefore be introduced without changing the matcher, and a different matcher can be introduced without changing the Markdown repository.
 
-`AiKnowledgeProcessor` obtains `IAiKnowledgeMatcherProvider` from `IAiKnowledgeMatcherFactory`.
-
-`OpenAiKnowledgeMatcherProvider` sends the question and all available documents to OpenAI. It expects JSON containing relevant document names, then filters the original collection by those names.
-
-The result is a new `KnowledgeContext` containing only matched documents.
-
-## Current pipeline
-
-**Markdown files → MarkdownKnowledgeRepository → MarkdownKnowledgeProvider → KnowledgeProcessor → AI matcher → Relevant KnowledgeContext**
-
-The repository therefore does not decide relevance, and the AI answer provider does not need to receive the entire knowledge store.
+The answer provider receives the reduced context rather than the complete knowledge set.

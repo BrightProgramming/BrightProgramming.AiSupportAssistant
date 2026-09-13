@@ -10,7 +10,7 @@ The AI Support Assistant provides a simple web interface for asking development 
 
 ## Documentation
 
-- [Architecture](docs/architecture.md)
+- [Architecture](docs/architecture/overview.md)
 - [Configuration](docs/configuration.md)
 - [Development](docs/development.md)
 - [Knowledge](docs/knowledge.md)

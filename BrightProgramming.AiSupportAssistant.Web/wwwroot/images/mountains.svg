@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 180" preserveAspectRatio="xMidYMax meet">
+
+    <!-- Back mountains -->
+    <polygon points="0,180 115,65 190,135 285,20 390,135 455,70 600,180" fill="#d9eaf3" opacity="0.75"></polygon>
+
+    <!-- Main mountain -->
+    <polygon points="115,180 190,135 285,20 330,180" fill="#c9e1ed" opacity="0.55"></polygon>
+
+    <!-- Front/right mountains -->
+    <polygon points="285,180 390,135 455,70 600,180" fill="#d2e6ef" opacity="0.65"></polygon>
+
+</svg>

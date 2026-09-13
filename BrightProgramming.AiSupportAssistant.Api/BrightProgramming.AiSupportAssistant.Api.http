@@ -4,7 +4,7 @@ POST {{BrightProgramming.AiSupportAssistant.Api_HostAddress}}/Support
 Content-Type: application/json
 
 {
-  "question": "How do I implement a binary search tree in C#?"
+  "question": "How do I implement a Dispose pattern??"
 }
 
 ###

@@ -1,0 +1,141 @@
+html, body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    margin: 0;
+    background: #f5f6f8;
+    color: #182848;
+}
+
+.app {
+    min-height: 100vh;
+    background: #f5f6f8;
+}
+
+/* Header */
+
+.app-header {
+    height: 64px;
+    display: flex;
+    align-items: center;
+    padding: 0 2rem;
+    background: #182848;
+    color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.app-title {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.app-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.15);
+    font-size: 1.1rem;
+}
+
+.app-brand {
+    margin-left: auto;
+    font-size: 0.85rem;
+    opacity: 0.7;
+}
+
+/* Main content */
+
+.app-content {
+    width: min(1200px, calc(100% - 3rem));
+    margin: 0 auto;
+    padding: 2rem 0;
+}
+
+/* Support page */
+
+.support-page {
+    width: 100%;
+}
+
+/* Question card */
+
+.support-card {
+    padding: 1.5rem;
+    background: white;
+    border: 1px solid #dfe3e8;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+    .support-card label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+    }
+
+    .support-card textarea {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0.75rem;
+        border: 1px solid #d5dbe1;
+        border-radius: 6px;
+        font: inherit;
+        resize: vertical;
+    }
+
+        .support-card textarea:focus {
+            outline: none;
+            border-color: #4b3f72;
+            box-shadow: 0 0 0 2px rgba(75, 63, 114, 0.12);
+        }
+
+.ask-button {
+    margin-top: 1rem;
+    padding: 0.65rem 1.5rem;
+    border: 0;
+    border-radius: 6px;
+    background: #1b6ec2;
+    color: white;
+    font: inherit;
+    cursor: pointer;
+}
+
+    .ask-button:hover {
+        background: #155da5;
+    }
+
+    .ask-button:disabled {
+        opacity: 0.6;
+        cursor: default;
+    }
+
+/* Answer */
+
+.answer {
+    margin-top: 2rem;
+}
+
+    .answer h2 {
+        margin-bottom: 0.75rem;
+    }
+
+.answer-content {
+    padding: 1.25rem;
+    background: #f8f9fb;
+    border: 1px solid #dfe3e8;
+    border-radius: 8px;
+    line-height: 1.6;
+}
+
+.error-message {
+    margin-top: 1rem;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    background: #fce8e8;
+    color: #a02020;
+}

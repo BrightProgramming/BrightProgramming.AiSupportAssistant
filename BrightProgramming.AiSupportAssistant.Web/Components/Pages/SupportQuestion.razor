@@ -1,0 +1,50 @@
+﻿@using Microsoft.AspNetCore.Components.Web
+
+<div class="question-card">
+
+    <div class="question-header">
+        <div class="question-icon" aria-hidden="true">
+            <img src="images/question.png"
+                 alt=""
+                 class="question-icon-image" />
+        </div>
+
+        <div class="question-header-text">
+            <div class="question-title">Question</div>
+            <div class="question-tagline">
+                Here's the question you'd like help with.
+            </div>
+        </div>
+    </div>
+
+    <div class="question-body">
+
+        <label for="question">What can I help you with?</label>
+
+        <textarea id="question"
+                  @ref="QuestionInput"
+                  @bind="Question"
+                  placeholder="Ask a support question...">
+        </textarea>
+
+        <button class="btn btn-primary"
+                @onclick="AskAsync"
+                disabled="@IsBusy">
+            @(IsBusy ? "Asking..." : "Ask")
+        </button>
+
+    </div>
+
+</div>
+
+@code {
+    private ElementReference QuestionInput;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await QuestionInput.FocusAsync();
+        }
+    }
+}

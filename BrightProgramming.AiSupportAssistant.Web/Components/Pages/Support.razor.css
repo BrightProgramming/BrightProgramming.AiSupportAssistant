@@ -1,0 +1,26 @@
+/* Error */
+.alert {
+    margin-top: 1rem;
+}
+
+/* Answer */
+.answer {
+    margin-top: 1.5rem;
+    padding: 1.25rem;
+    border: 1px solid #d9e8ef;
+    border-radius: 8px;
+    background: #f7fbfd;
+}
+
+    .answer h2 {
+        margin: 0 0 0.75rem;
+        color: #182848;
+        font-size: 1.35rem;
+        font-family: inherit;
+    }
+
+.answer-content {
+    color: #26384a;
+    line-height: 1.6;
+    font-family: inherit;
+}

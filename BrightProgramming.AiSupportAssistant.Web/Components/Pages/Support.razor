@@ -1,0 +1,21 @@
+﻿@page "/"
+
+<PageTitle>AI Support Assistant</PageTitle>
+
+<SupportHero />
+
+<SupportQuestion @bind-Question="Question"
+                 OnAsk="AskAsync"
+                 IsBusy="IsBusy" />
+
+@if (!string.IsNullOrWhiteSpace(Error))
+{
+    <div class="alert alert-danger">
+        @Error
+    </div>
+}
+
+@if (!string.IsNullOrWhiteSpace(Answer))
+{
+    <SupportAnswer Answer="@Answer" />
+}

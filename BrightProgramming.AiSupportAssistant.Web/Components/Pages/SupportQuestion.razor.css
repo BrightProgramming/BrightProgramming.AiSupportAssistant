@@ -1,0 +1,119 @@
+/* Question card */
+.question-card {
+    border: 1px solid #d9dee5;
+    border-radius: 10px;
+    background: #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+}
+
+/* Question header */
+.question-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: #eef9f9;
+    border-bottom: 1px solid #d5e4e8;
+}
+
+.question-icon {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    border-radius: 50%;
+    background: #2d9eb0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.question-icon-image {
+    width: 34px;
+    height: 34px;
+    object-fit: contain;
+    display: block;
+}
+
+.speech-bubble {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 16px;
+    border-radius: 50%;
+    background: white;
+    color: #2f9caf;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    line-height: 1;
+}
+
+    .speech-bubble::after {
+        content: "";
+        position: absolute;
+        bottom: -4px;
+        left: 4px;
+        width: 0;
+        height: 0;
+        border-top: 6px solid white;
+        border-right: 5px solid transparent;
+    }
+
+.question-header-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.question-title {
+    color: #182848;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.question-tagline {
+    margin-top: 0.2rem;
+    color: #48627d;
+    font-size: 0.9rem;
+    line-height: 1.2;
+}
+
+/* Question body */
+.question-body {
+    padding: 1.25rem;
+}
+
+    .question-body label {
+        display: block;
+        margin-bottom: 0.6rem;
+        color: #182848;
+        font-size: 1rem;
+    }
+
+    .question-body textarea {
+        width: 100%;
+        min-height: 145px;
+        margin-bottom: 0;
+        padding: 0.75rem;
+        resize: vertical;
+        border: 1px solid #ccd6df;
+        border-radius: 6px;
+        font-family: inherit;
+        font-size: 1rem;
+        color: #26384a;
+        box-sizing: border-box;
+    }
+
+        .question-body textarea:focus {
+            border-color: #2f91a5;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(47, 145, 165, 0.12);
+        }
+
+    .question-body button {
+        margin-top: 0;
+    }

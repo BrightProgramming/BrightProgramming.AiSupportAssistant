@@ -1,0 +1,43 @@
+﻿@using Markdig
+@using Microsoft.AspNetCore.Components
+
+<div class="support-answer">
+
+    <div class="support-answer-header">
+
+        <div class="support-answer-icon" aria-hidden="true">
+            <img src="images/robot.png"
+                 alt=""
+                 class="robot-image" />
+        </div>
+
+        <div class="support-answer-heading">
+            <div class="support-answer-title">Answer</div>
+            <div class="support-answer-subtitle">
+                Here's the response from the AI Support Assistant.
+            </div>
+        </div>
+
+    </div>
+
+    <div class="support-answer-body">
+        @((MarkupString)RenderMarkdown(Answer))
+    </div>
+
+</div>
+
+@code {
+    [Parameter]
+    public string Answer { get; set; } = string.Empty;
+
+    private static readonly MarkdownPipeline MarkdownPipeline =
+        new MarkdownPipelineBuilder()
+            .UseAdvancedExtensions()
+            .DisableHtml()
+            .Build();
+
+    private static string RenderMarkdown(string markdown)
+    {
+        return Markdown.ToHtml(markdown ?? string.Empty, MarkdownPipeline);
+    }
+}

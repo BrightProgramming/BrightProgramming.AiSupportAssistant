@@ -1,0 +1,123 @@
+.hero {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-height: 120px;
+    padding: 1.25rem 1.5rem;
+    overflow: hidden;
+    background: #eef9fd;
+    border: 1px solid #d5e5ed;
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+
+/* Wizard animation */
+.hero-icon {
+    position: relative;
+    z-index: 2;
+    width: 72px;
+    height: 72px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+    .hero-icon img {
+        display: block;
+        width: 72px;
+        height: 72px;
+        object-fit: contain;
+    }
+
+/* Main hero content */
+.hero-content {
+    position: relative;
+    z-index: 2;
+    flex: 1;
+}
+
+    .hero-content h1 {
+        margin: 0;
+        color: #102a56;
+        font-size: 2rem;
+        font-weight: 600;
+        line-height: 1.2;
+    }
+
+    .hero-content p {
+        margin: 0.35rem 0 0;
+        color: #315b87;
+        font-size: 1rem;
+        line-height: 1.4;
+    }
+
+/* Right-hand tagline */
+.hero-tagline {
+    position: relative;
+    z-index: 2;
+    flex-shrink: 0;
+    color: #17628c;
+    font-size: 0.95rem;
+    font-style: italic;
+    line-height: 1.5;
+    text-align: right;
+}
+
+/* Decorative mountains */
+.hero-mountains {
+    position: absolute;
+    right: 6rem;
+    bottom: 0;
+    width: 420px;
+    height: 115px;
+    background-image: url("/images/mountains.svg");
+    background-repeat: no-repeat;
+    background-position: bottom right;
+    background-size: contain;
+    opacity: 0.7;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Keep the hero usable on narrower screens */
+@media (max-width: 800px) {
+    .hero {
+        padding: 1rem;
+    }
+
+    .hero-tagline {
+        display: none;
+    }
+
+    .hero-mountains {
+        right: 0;
+        width: 320px;
+    }
+}
+
+@media (max-width: 600px) {
+    .hero-icon {
+        width: 56px;
+        height: 56px;
+    }
+
+        .hero-icon img {
+            width: 56px;
+            height: 56px;
+        }
+
+    .hero-content h1 {
+        font-size: 1.5rem;
+    }
+
+    .hero-content p {
+        font-size: 0.9rem;
+    }
+
+    .hero-mountains {
+        opacity: 0.4;
+    }
+}

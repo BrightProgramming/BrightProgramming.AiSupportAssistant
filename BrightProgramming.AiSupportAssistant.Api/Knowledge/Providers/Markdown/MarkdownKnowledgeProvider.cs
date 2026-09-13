@@ -1,26 +1,22 @@
-﻿using BrightProgramming.AiSupportAssistant.Api.Configuration;
-using BrightProgramming.AiSupportAssistant.Api.Constants;
+﻿using BrightProgramming.AiSupportAssistant.Api.Constants;
 using BrightProgramming.AiSupportAssistant.Api.Knowledge.Models;
-using Microsoft.Extensions.Options;
+using BrightProgramming.AiSupportAssistant.Api.Knowledge.Repository;
 
 namespace BrightProgramming.AiSupportAssistant.Api.Knowledge.Providers.Markdown;
 
 public class MarkdownKnowledgeProvider : IKnowledgeProvider
 {
-    private readonly KnowledgeSourceOptions _options;
-    private readonly ILogger<MarkdownKnowledgeProvider> _logger;
+    private readonly IKnowledgeRepository _repository;
     private readonly Lazy<KnowledgeContext> _knowledge;
 
     public string Name => KnowledgeProvider.Markdown;
 
     public MarkdownKnowledgeProvider(
-        IOptions<KnowledgeSourceOptions> options,
-        ILogger<MarkdownKnowledgeProvider> logger)
+        IKnowledgeRepository repository)
     {
-        _options = options.Value;
-        _logger = logger;
+        _repository = repository;
 
-        _knowledge = new Lazy<KnowledgeContext>(LoadDocuments);
+        _knowledge = new Lazy<KnowledgeContext>(LoadKnowledge);
     }
 
     public Task<KnowledgeContext> GetKnowledgeAsync(
@@ -29,48 +25,11 @@ public class MarkdownKnowledgeProvider : IKnowledgeProvider
         return Task.FromResult(_knowledge.Value);
     }
 
-    private KnowledgeContext LoadDocuments()
+    private KnowledgeContext LoadKnowledge()
     {
-        var path = Path.GetFullPath(_options.Path);
-
-        if (!Directory.Exists(path))
-        {
-            _logger.LogWarning(
-                "Knowledge directory does not exist: {Path}",
-                path);
-
-            return new KnowledgeContext
-            {
-                Documents = []
-            };
-        }
-
-        var documents = new List<KnowledgeDocument>();
-
-        var files = Directory.GetFiles(
-            path,
-            "*.md",
-            SearchOption.AllDirectories);
-
-        foreach (var file in files)
-        {
-            var content = File.ReadAllText(file);
-
-            documents.Add(new KnowledgeDocument
-            {
-                Name = Path.GetFileName(file),
-                Content = content
-            });
-        }
-
-        _logger.LogInformation(
-            "Loaded {DocumentCount} knowledge documents from {Path}",
-            documents.Count,
-            path);
-
         return new KnowledgeContext
         {
-            Documents = documents
+            Documents = _repository.GetDocuments()
         };
     }
 }

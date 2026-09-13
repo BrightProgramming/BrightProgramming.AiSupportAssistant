@@ -8,7 +8,7 @@ The application follows a simple flow:
 
 **Web UI → API → Support Service → Knowledge → AI → Response**
 
-![Architecture overview](images/architecture-overview.png)
+![Architecture overview](../images/architecture-overview.png)
 
 ## Main components
 

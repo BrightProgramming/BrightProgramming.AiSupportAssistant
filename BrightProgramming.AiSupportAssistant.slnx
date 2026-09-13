@@ -1,4 +1,16 @@
 <Solution>
+  <Folder Name="/documentation/">
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/documentation/docs/">
+    <File Path="docs/architecture.md" />
+    <File Path="docs/configuration.md" />
+    <File Path="docs/development.md" />
+    <File Path="docs/knowledge.md" />
+  </Folder>
+  <Folder Name="/documentation/docs/images/">
+    <File Path="docs/images/ai-support-assistant.png" />
+  </Folder>
   <Project Path="BrightProgramming.AiSupportAssistant.Api.IntegrationTests/BrightProgramming.AiSupportAssistant.Api.IntegrationTests.csproj" />
   <Project Path="BrightProgramming.AiSupportAssistant.Api.UnitTests/BrightProgramming.AiSupportAssistant.Api.UnitTests.csproj" />
   <Project Path="BrightProgramming.AiSupportAssistant.Api/BrightProgramming.AiSupportAssistant.Api.csproj" />

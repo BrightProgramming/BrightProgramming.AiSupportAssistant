@@ -53,7 +53,11 @@ The `KnowledgeProcessor` is responsible for obtaining and processing the applica
 
 It uses the configured knowledge provider to obtain the available knowledge.
 
-For the current implementation, this results in the following flow:
+For the current implementation, the knowledge retrieval flow is:
+
+**KnowledgeProcessor → KnowledgeProviderFactory → KnowledgeProvider → KnowledgeRepository → Knowledge Source**
+
+The current concrete implementation is:
 
 **KnowledgeProcessor → MarkdownKnowledgeProvider → MarkdownKnowledgeRepository → Markdown files**
 
@@ -83,7 +87,7 @@ It uses the configured AI answer provider.
 
 The current implementation uses:
 
-**IAiAnswerProvider → OpenAiAnswerProvider → OpenAI**
+**AiAnswerProcessor → AiAnswerProviderFactory → IAiAnswerProvider → OpenAiAnswerProvider → OpenAI**
 
 The AI provider receives the user's question together with the relevant knowledge context and generates the response.
 
@@ -119,6 +123,10 @@ The complete conceptual flow is therefore:
 
 ↓
 
+**KnowledgeProviderFactory**
+
+↓
+
 **Knowledge Provider**
 
 ↓
@@ -140,6 +148,10 @@ The complete conceptual flow is therefore:
 ↓
 
 **AiAnswerProcessor**
+
+↓
+
+**AiAnswerProviderFactory**
 
 ↓
 
@@ -196,6 +208,6 @@ The application follows a straightforward pipeline:
 
 **Receive → Retrieve Knowledge → Identify Relevant Knowledge → Generate Answer → Return Response**
 
-The `SupportService` coordinates this pipeline while specialised processors, providers and repositories handle the individual responsibilities.
+The `SupportService` coordinates this pipeline while specialised processors, providers, repositories and factories handle the individual responsibilities.
 
 This provides a simple request flow while keeping the implementation replaceable and extensible.

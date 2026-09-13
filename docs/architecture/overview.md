@@ -34,15 +34,15 @@ The intention is to make the application easy to understand while allowing indiv
 
 ### Application flow
 
-[Application Flow](architecture/application-flow.md) explains how a question moves through the application from the Web UI to the final response.
+[Application Flow](application-flow.md) explains how a question moves through the application from the Web UI to the final response.
 
 ### Provider model
 
-[Provider Model](architecture/provider-model.md) explains how providers allow implementations to be replaced without changing the application workflow.
+[Provider Model](provider-model.md) explains how providers allow implementations to be replaced without changing the application workflow.
 
 ### Knowledge architecture
 
-[Knowledge Architecture](architecture/knowledge-architecture.md) explains the relationship between knowledge providers, processors, repositories and knowledge sources.
+[Knowledge Architecture](knowledge-architecture.md) explains the relationship between knowledge providers, processors, repositories and knowledge sources.
 
 ## Related documentation
 

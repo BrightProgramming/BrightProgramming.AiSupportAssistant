@@ -1,51 +1,37 @@
-# Architecture
+# Architecture Overview
 
-The AI Support Assistant is designed around clearly separated responsibilities, with interfaces used to keep key components replaceable and extensible.
-
-## Overview
-
-The application follows a simple flow:
-
-**Web UI → API → Support Service → Knowledge → AI → Response**
+The AI Support Assistant separates the web UI, API boundary, application orchestration, knowledge processing and AI integrations.
 
 ![Architecture overview](../images/architecture-overview.png)
 
 ## Main components
 
-- **Web** — Provides the user interface.
-- **API** — Provides the HTTP boundary for the application.
-- **Support Service** — Coordinates the support request.
-- **Knowledge** — Retrieves and processes internal knowledge.
-- **AI** — Matches the question to knowledge and generates the response.
+- **Web** — Blazor Web application that collects questions and renders Markdown answers.
+- **API** — ASP.NET Core API exposing the `/Support` POST endpoint.
+- **SupportService** — Coordinates knowledge retrieval and answer generation.
+- **Knowledge processing** — Retrieves available knowledge and asks an AI matcher to identify relevant documents.
+- **AI answer processing** — Passes the question and relevant knowledge to the configured answer provider.
 
-## Design principles
+## Provider model
 
-The architecture is based on a few key principles:
+Three independent provider abstractions are used:
 
-- Clear separation of responsibilities
-- Interface-driven design
-- Replaceable providers
-- Separation of application logic from infrastructure
-- Configuration-driven implementations
+- `IKnowledgeProvider` — supplies available knowledge.
+- `IAiKnowledgeMatcherProvider` — identifies relevant knowledge.
+- `IAiAnswerProvider` — generates the final answer.
 
-The intention is to make the application easy to understand while allowing individual components to be replaced or extended.
+Each has a corresponding factory that selects the configured implementation.
 
-## Detailed architecture
+## Current implementations
 
-### Application flow
+The current configuration uses:
 
-[Application Flow](application-flow.md) explains how a question moves through the application from the Web UI to the final response.
+- `MarkdownKnowledgeProvider` backed by `MarkdownKnowledgeRepository`.
+- `OpenAiKnowledgeMatcherProvider` for knowledge matching.
+- `OpenAiAnswerProvider` for answer generation.
 
-### Provider model
+The detailed request lifecycle is described in [Application Flow](application-flow.md).
 
-[Provider Model](provider-model.md) explains how providers allow implementations to be replaced without changing the application workflow.
+The provider extension model is described in [Provider Model](provider-model.md).
 
-### Knowledge architecture
-
-[Knowledge Architecture](knowledge-architecture.md) explains the relationship between knowledge providers, processors, repositories and knowledge sources.
-
-## Related documentation
-
-- [Knowledge](knowledge.md) — How to use and extend the knowledge system.
-- [Configuration](configuration.md) — Application configuration and secrets.
-- [Development](development.md) — Setting up, building and running the application.
+The knowledge implementation is described in [Knowledge Architecture](knowledge-architecture.md).

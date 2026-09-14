@@ -1,5 +1,7 @@
 # AI Support Assistant
 
+[![Build](https://github.com/BrightProgramming/BrightProgramming.AiSupportAssistant/actions/workflows/dotnet.yml/badge.svg)](https://github.com/BrightProgramming/BrightProgramming.AiSupportAssistant/actions/workflows/dotnet.yml)
+
 An AI-powered support assistant for answering development questions using internal knowledge and AI.
 
 ![AI Support Assistant](docs/images/ai-support-assistant.png)

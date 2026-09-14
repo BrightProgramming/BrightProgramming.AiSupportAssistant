@@ -1,4 +1,8 @@
 <Solution>
+  <Folder Name="/build/" />
+  <Folder Name="/build/workflow/">
+    <File Path=".github/workflows/dotnet.yml" />
+  </Folder>
   <Folder Name="/documentation/">
     <File Path="README.md" />
   </Folder>
